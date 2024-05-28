@@ -1,1 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant UI</title>
+    <link rel="icon" href="https://ao.arweave.dev/images/ao-pictograph_light.svg" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f7f7f7, #e0e0e0);
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .titlebar {
+            background: #4A90E2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        .main {
+            padding: 20px;
+            text-align: center;
+        }
+        .swap-button {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .swap-button:hover {
+            background: #357ABD;
+        }
+        .connection {
+            margin: 30px 0;
+        }
+        .connection .separate {
+            color: #666;
+            margin: 20px 0;
+            position: relative;
+        }
+        .connection .separate::before, .connection .separate::after {
+            content: '';
+            height: 1px;
+            background: #ccc;
+            position: absolute;
+            width: 40%;
+            top: 50%;
+        }
+        .connection .separate::before {
+            left: 0;
+        }
+        .connection .separate::after {
+            right: 0;
+        }
+        .wallet-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .wallet-btn {
+            background: #eee;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .wallet-btn:hover {
+            background: #ddd;
+        }
+        .apply-token {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .apply-token a {
+            color: #4A90E2;
+            transition: transform 0.3s;
+        }
+        .apply-token a:hover {
+            transform: scale(1.1);
+        }
+        .ContainerTerminalCls {
+            margin-top: 20px;
+            width: 100%;
+            height: 500px;
+            display: none;
+        }
+        .ContainerTerminalCls iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="titlebar">
+            Elegant UI
+        </div>
+        <div class="main">
+            <div class="data"> 
+            </div>   
+            <button class="swap-button" id="connectArConnect">Connect ArConnect Wallet</button>
+            <div id="ContainerTerminal" class="ContainerTerminalCls">
+                <iframe id="terminal" src="" frameborder="0"></iframe>
+            </div>
+            <div class="connection">
+                <div class="separate">
+                    Connect wallet with
+                </div>
+                <div class="wallet-buttons">
+                    <div class="wallet-btn" id="ArweaweApp">Arweawe.app</div>
+                    <div class="wallet-btn" id="Othent">Othent</div> 
+                </div>
+            </div>
+        </div> 
+        <div class="apply-token">
+            <a href="https://github.com/crypto0mega/Tasks/edit/main/aosUI">
+                <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github">
+                    <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+                </svg>
+            </a>   
+            <a href="https://ao.arweave.dev/">
+                <img src="https://cookbook_ao.g8way.io/ao_pictograph_darkmode.svg" height="26" width="26" alt="ao logo">
+            </a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('connectArConnect').addEventListener('click', async () => {
+            if (window.arweaveWallet) {
+                try {
+                    await window.arweaveWallet.connect(["ACCESS_ADDRESS", "SIGN_TRANSACTION"]);
+                    console.log("ArConnect connected");
+                    document.getElementById('ContainerTerminal').style.display = 'block';
+                    document.getElementById('terminal').src = "https://sh_ao.g8way.io/";
+                } catch (error) {
+                    console.error("Failed to connect to ArConnect", error);
+                    alert("Failed to connect to ArConnect. Please try again.");
+                }
+            } else {
+                alert("ArConnect wallet not installed. Please install it first.");
+            }
+        });
+
+        if (!window.arweaveWallet) {
+            console.warn("ArConnect is not installed.");
+        }
+    </script>
+</body>
+</html>
 
